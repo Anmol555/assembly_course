@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=1-00:00:00
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=end
+#SBATCH --job-name=hifiasm_genome_assembly
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assemblies/hifiasm/output_flye_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assemblies/hifiasm/error_flye_%j.e
+#SBATCH --partition=pibu_el8
+ 
+
+
+WORKDIR=/data/users/aratan/assembly_annotation_course/fastp_filtered
+cd $WORKDIR
+
+mkdir -p assemblies/hifiasm
+
+OUTPUTDIR=/data/users/aratan/assembly_annotation_course/assemblies/hifiasm
+
+#use flye container to assemble genome
+apptainer exec \
+--bind $WORKDIR:$WORKDIR --bind $OUTPUTDIR:$OUTPUTDIR \
+/containers/apptainer/hifiasm_0.19.8.sif \
+hifiasm -o $OUTPUTDIR/hifiasm -t 16 $WORKDIR/ERR11437335_processed.fastq.gz \
+
+
+cd $OUTPUTDIR
+
+for file in *.gfa; do
+    awk '/^S/{print ">"$2;print $3}' "$file" > "${file%.gfa}.fa"
+done

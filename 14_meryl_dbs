@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=23:00:00
+#SBATCH --job-name=meryl_dbs
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assembly_eval/merqury/%x/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assembly_eval/merqury/%x/error_%j.e
+
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+cd $WORKDIR
+
+# Create output directory if it doesn't exist
+OUTPUTDIR=$WORKDIR/assembly_eval/merqury/meryl_dbs/
+mkdir -p $OUTPUTDIR
+
+# Apptainer command to execute meryl for different assemblies
+apptainer exec \
+--bind $WORKDIR \
+/containers/apptainer/merqury_1.3.sif \
+bash -c "
+meryl k=18 \
+count $WORKDIR/assemblies/flye/assembly.fasta \
+output $OUTPUTDIR/flye.meryl && \
+
+meryl k=18 count \
+$WORKDIR/assemblies/hifiasm/hifiasm.bp.p_ctg.fa \
+output $OUTPUTDIR/hifiasm.meryl && \
+
+meryl k=18 \
+count $WORKDIR/assemblies/lja/assembly.fasta \
+output $OUTPUTDIR/lja.meryl"
+

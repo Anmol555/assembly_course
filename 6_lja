@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=1-00:00:00
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=end
+#SBATCH --job-name=lja_genome_assembly
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assemblies/lja/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assemblies/lja/error_%j.e
+#SBATCH --partition=pibu_el8
+
+# Define working and output directories
+WORKDIR=/data/users/aratan/assembly_annotation_course/fastp_filtered
+
+cd $WORKDIR
+
+# Create output directory if it doesn't exist
+mkdir -p assemblies/lja
+
+OUTPUTDIR=/data/users/aratan/assembly_annotation_course/assemblies/lja
+
+# Run the LJA assembly using Apptainer, bind the working and output directories
+apptainer exec \
+--bind $WORKDIR:$WORKDIR --bind $OUTPUTDIR:$OUTPUTDIR \
+/containers/apptainer/lja-0.2.sif \
+lja --reads $WORKDIR/ERR11437335_processed.fastq.gz -o $OUTPUTDIR

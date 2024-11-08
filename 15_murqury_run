@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=23:00:00
+#SBATCH --job-name=merqury_run
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assembly_eval/merqury/merqury_run/%x/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assembly_eval/merqury/merqury_run/%x/error_%j.e
+
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+cd $WORKDIR 
+
+OUTPUTDIR=$WORKDIR/assembly_eval/merqury/merqury_run/
+mkdir -p $OUTPUTDIR
+mkdir -p $OUTPUTDIR/logs    # Ensure logs directory is created
+
+export MERQURY="/usr/local/share/merqury"
+
+FLYE_MERYL="$WORKDIR/assembly_eval/merqury/meryl_dbs/flye.meryl"
+FLYE_FASTA="$WORKDIR/assemblies/flye/assembly.fasta"
+FLYE_OUTPUT="$OUTPUTDIR/flye_output"
+
+HIFIASM_MERYL="$WORKDIR/assembly_eval/merqury/meryl_dbs/hifiasm.meryl"
+HIFIASM_FASTA="$WORKDIR/assemblies/hifiasm/hifiasm.bp.p_ctg.fa"
+HIFIASM_OUTPUT="$OUTPUTDIR/hifiasm_output"
+
+LJA_MERYL="$WORKDIR/assembly_eval/merqury/meryl_dbs/lja.meryl"
+LJA_FASTA="$WORKDIR/assemblies/lja/assembly.fasta"
+LJA_OUTPUT="$OUTPUTDIR/lja_output"
+
+# Change directory to OUTPUTDIR to ensure all output is written there
+cd $OUTPUTDIR
+
+# Run Merqury for Flye Assembly
+apptainer exec /containers/apptainer/merqury_1.3.sif \
+$MERQURY/merqury.sh $FLYE_MERYL $FLYE_FASTA $FLYE_OUTPUT
+
+# Run Merqury for Hifiasm Assembly
+apptainer exec /containers/apptainer/merqury_1.3.sif \
+$MERQURY/merqury.sh $HIFIASM_MERYL $HIFIASM_FASTA $HIFIASM_OUTPUT
+
+# Run Merqury for LJA Assembly
+apptainer exec /containers/apptainer/merqury_1.3.sif \
+$MERQURY/merqury.sh $LJA_MERYL $LJA_FASTA $LJA_OUTPUT
+

@@ -1,0 +1,30 @@
+#!/bin/bash
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=40G
+#SBATCH --time=01:00:00
+#SBATCH --job-name=hifiasm_BUSCO
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assembly_eval/busco/hifiasm/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assembly_eval/busco/hifiasm/error_%j.e
+
+# Define working directory
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+cd $WORKDIR
+
+# Create directories for each assembly output and error
+mkdir -p $WORKDIR/assembly_eval/busco/hifiasm
+
+# Running BUSCO for hifiasm assembly with force overwrite
+
+apptainer exec \
+--bind $WORKDIR:$WORKDIR \
+/containers/apptainer/busco_5.7.1.sif \
+busco -i $WORKDIR/assemblies/hifiasm/hifiasm.bp.p_ctg.fa  \
+-o hifiasm_busco_output \
+-l $WORKDIR/busco_datasets/brassicales_odb10 \
+-m genome --cpu 1 \
+--offline \
+--out_path $WORKDIR/assembly_eval/busco/hifiasm -f
+

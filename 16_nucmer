@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=23:00:00 
+#SBATCH --job-name=nucmer 
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/compare/nucmer/%x/output_%j.o  
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/compare/nucmer/%x/error_%j.e 
+
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+cd $WORKDIR
+
+mkdir -p $WORKDIR/compare/nucmer
+
+OUTPUTDIR=$WORKDIR/compare/nucmer
+
+ref=$WORKDIR/references/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa
+flye=$WORKDIR/assemblies/flye/assembly.fasta
+hifi=$WORKDIR/assemblies/hifiasm/hifiasm.bp.p_ctg.fa
+lja=$WORKDIR/assemblies/lja/assembly.fasta
+
+CONTAINER=/containers/apptainer/mummer4_gnuplot.sif
+
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/flye_vs_ref --breaklen 1000 --mincluster 1000 $ref $flye && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/hifi_vs_ref --breaklen 1000 --mincluster 1000 $ref $hifi && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/lja_vs_ref --breaklen 1000 --mincluster 1000 $ref $lja && \
+    
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/hifi_vs_lja --breaklen 1000 --mincluster 1000 $hifi $lja && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/hifi_vs_flye --breaklen 1000 --mincluster 1000 $hifi $flye && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/flye_vs_lja --breaklen 1000 --mincluster 1000 $flye $lja
+

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=23:00:00
+#SBATCH --job-name=nucmer
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/all/%x/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/all/%x/error_%j.e
+
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+cd $WORKDIR
+
+mkdir -p $WORKDIR/all
+
+OUTPUTDIR=$WORKDIR/all
+
+# Assembly file paths
+jva=/data/users/jvaleriano/assembly_course/assemblies/flye/flye_assembly.fasta
+dba=/data/users/dbassi/assembly_course/assemblies/flye-assembly/assembly.fasta
+igla=/data/users/lgladiseva/assembly_course/assembly_out/flye/assembly.fasta
+rli=/data/users/rli/assembly_annotation_course/assemblies/flye/assembly.fasta
+ara=/data/users/aratan/assembly_annotation_course/assemblies/flye/assembly.fasta
+
+CONTAINER=/containers/apptainer/mummer4_gnuplot.sif
+
+# Perform pairwise comparisons
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/jva_vs_dba --breaklen 1000 --mincluster 1000 $jva $dba && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/jva_vs_igla --breaklen 1000 --mincluster 1000 $jva $igla && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/jva_vs_rli --breaklen 1000 --mincluster 1000 $jva $rli && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/jva_vs_ara --breaklen 1000 --mincluster 1000 $jva $ara && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/dba_vs_igla --breaklen 1000 --mincluster 1000 $dba $igla && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/dba_vs_rli --breaklen 1000 --mincluster 1000 $dba $rli && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/dba_vs_ara --breaklen 1000 --mincluster 1000 $dba $ara && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/igla_vs_rli --breaklen 1000 --mincluster 1000 $igla $rli && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/igla_vs_ara --breaklen 1000 --mincluster 1000 $igla $ara && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    nucmer --prefix=$OUTPUTDIR/rli_vs_ara --breaklen 1000 --mincluster 1000 $rli $ara
+
