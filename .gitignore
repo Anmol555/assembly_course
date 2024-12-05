@@ -1,0 +1,16 @@
+#ignoring
+all/
+assemblies/        
+assembly_eval/
+busco_datasets/ 
+compare/
+fastqcresults/
+No-0/     
+references/
+assemblies/
+busco_565445.log/  
+busco_downloads/  
+fastp_filtered/  
+hifiasm_busco_output/
+RNAseq_Sha/
+trinity_out_dir/
