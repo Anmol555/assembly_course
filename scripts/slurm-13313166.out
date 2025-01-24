@@ -1,0 +1,56 @@
+2024-10-03 16:00:11 INFO:	***** Start a BUSCO v5.7.1 analysis, current time: 10/03/2024 16:00:11 *****
+2024-10-03 16:00:11 INFO:	Configuring BUSCO with local environment
+2024-10-03 16:00:11 INFO:	Running genome mode
+2024-10-03 16:00:11 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:00:11 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:00:21 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:02:01 INFO:	Cannot reach https://busco-data.ezlab.org/v5/data/file_versions.tsv. Retrying with backup url https://busco-data2.ezlab.org/v5/data/
+2024-10-03 16:02:01 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:02:01 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:02:11 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:03:51 ERROR:	Cannot reach https://busco-data2.ezlab.org/v5/data/file_versions.tsv
+2024-10-03 16:03:51 ERROR:	BUSCO analysis failed!
+2024-10-03 16:03:51 ERROR:	Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
+
+2024-10-03 16:03:53 INFO:	***** Start a BUSCO v5.7.1 analysis, current time: 10/03/2024 16:03:53 *****
+2024-10-03 16:03:53 INFO:	Configuring BUSCO with local environment
+2024-10-03 16:03:53 INFO:	Running genome mode
+2024-10-03 16:03:53 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:03:53 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:04:03 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:05:43 INFO:	Cannot reach https://busco-data.ezlab.org/v5/data/file_versions.tsv. Retrying with backup url https://busco-data2.ezlab.org/v5/data/
+2024-10-03 16:05:43 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:05:43 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:05:53 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:07:33 ERROR:	Cannot reach https://busco-data2.ezlab.org/v5/data/file_versions.tsv
+2024-10-03 16:07:33 ERROR:	BUSCO analysis failed!
+2024-10-03 16:07:34 ERROR:	Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
+
+2024-10-03 16:07:35 INFO:	***** Start a BUSCO v5.7.1 analysis, current time: 10/03/2024 16:07:35 *****
+2024-10-03 16:07:35 INFO:	Configuring BUSCO with local environment
+2024-10-03 16:07:35 INFO:	Running genome mode
+2024-10-03 16:07:35 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:07:35 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:07:45 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:09:25 INFO:	Cannot reach https://busco-data.ezlab.org/v5/data/file_versions.tsv. Retrying with backup url https://busco-data2.ezlab.org/v5/data/
+2024-10-03 16:09:25 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:09:26 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:09:36 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:11:16 ERROR:	Cannot reach https://busco-data2.ezlab.org/v5/data/file_versions.tsv
+2024-10-03 16:11:16 ERROR:	BUSCO analysis failed!
+2024-10-03 16:11:16 ERROR:	Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
+
+2024-10-03 16:11:17 INFO:	***** Start a BUSCO v5.7.1 analysis, current time: 10/03/2024 16:11:17 *****
+2024-10-03 16:11:17 INFO:	Configuring BUSCO with local environment
+2024-10-03 16:11:17 INFO:	Running transcriptome mode
+2024-10-03 16:11:17 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:11:17 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:11:28 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:13:08 INFO:	Cannot reach https://busco-data.ezlab.org/v5/data/file_versions.tsv. Retrying with backup url https://busco-data2.ezlab.org/v5/data/
+2024-10-03 16:13:08 INFO:	Downloading information on latest versions of BUSCO data...
+2024-10-03 16:13:08 INFO:	Download connection problem. Retrying in 10 seconds
+2024-10-03 16:13:18 INFO:	Download connection problem. Retrying in 100 seconds
+2024-10-03 16:14:58 ERROR:	Cannot reach https://busco-data2.ezlab.org/v5/data/file_versions.tsv
+2024-10-03 16:14:58 ERROR:	BUSCO analysis failed!
+2024-10-03 16:14:58 ERROR:	Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
+

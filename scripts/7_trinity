@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=1-00:00:00
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=end
+#SBATCH --job-name=trinity_genome_assembly
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assemblies/trinity/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assemblies/trinity/error_%j.e
+#SBATCH --partition=pibu_el8
+
+module load Trinity/2.15.1-foss-2021a
+
+# Define working and output directories
+WORKDIR=/data/users/aratan/assembly_annotation_course
+OUTPUTDIR=/data/users/aratan/assembly_annotation_course/assemblies/trinity
+
+cd $WORKDIR
+
+mkdir -p assemblies/trinity
+
+Trinity --seqType fq \
+--left $WORKDIR/fastp_filtered/ERR754081_1_filtered.fastq.gz \
+--right $WORKDIR/fastp_filtered/ERR754081_2_filtered.fastq.gz \
+--max_memory 60G --output $OUTPUTDIR
+

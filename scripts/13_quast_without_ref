@@ -1,0 +1,47 @@
+#!/bin/bash
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=03:00:00
+#SBATCH --job-name=quast_without_ref
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assembly_eval/quast/without_ref/%x/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assembly_eval/quast/without_ref/%x/error_%j.e
+
+# Define working directory and set paths for assemblies and PacBio reads
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+ASSEMBLY_DIR=$WORKDIR/assemblies
+OUTPUT_DIR=$WORKDIR/assembly_eval/quast/without_ref
+PACBIO_READS=$WORKDIR/No-0/ERR11437335.fastq.gz 
+
+# Change to working directory
+cd $WORKDIR
+
+# Create output directories for each assembly
+mkdir -p $OUTPUT_DIR/flye $OUTPUT_DIR/hifiasm $OUTPUT_DIR/lja
+
+# QUAST command for Flye assembly without reference, with PacBio reads, and custom label
+apptainer exec /containers/apptainer/quast_5.2.0.sif quast.py \
+  --threads 16 --eukaryote --est-ref-size 135000000 --large \
+  --pacbio $PACBIO_READS \
+  -l "Flye Assembly" \
+  -o $OUTPUT_DIR/flye \
+  $ASSEMBLY_DIR/flye/assembly.fasta
+
+# QUAST command for Hifiasm assembly without reference, with PacBio reads, and custom label
+apptainer exec /containers/apptainer/quast_5.2.0.sif quast.py \
+  --threads 16 --eukaryote --est-ref-size 135000000 --large \
+  --pacbio $PACBIO_READS \
+  -l "Hifiasm Assembly" \
+  -o $OUTPUT_DIR/hifiasm \
+  $ASSEMBLY_DIR/hifiasm/hifiasm.bp.p_ctg.fa
+
+# QUAST command for LJA assembly without reference, with PacBio reads, and custom label
+apptainer exec /containers/apptainer/quast_5.2.0.sif quast.py \
+  --threads 16 --eukaryote --est-ref-size 135000000 --large \
+  --pacbio $PACBIO_READS \
+  -l "LJA Assembly" \
+  -o $OUTPUT_DIR/lja \
+  $ASSEMBLY_DIR/lja/assembly.fasta
+

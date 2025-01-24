@@ -1,0 +1,72 @@
+#!/bin/bash
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=1-00:00:00
+#SBATCH --job-name=quast_with_ref
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/assembly_eval/quast/with_ref/%x/output_%j.o
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/assembly_eval/quast/with_ref/%x/error_%j.e
+
+# Define working directory and set paths for assemblies, reference, and PacBio reads
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+ASSEMBLY_DIR=$WORKDIR/assemblies
+REFERENCE_DIR=/data/users/aratan/assembly_annotation_course/references
+OUTPUT_DIR=$WORKDIR/assembly_eval/quast/with_ref
+PACBIO_READS=$WORKDIR/No-0/ERR11437335.fastq.gz 
+
+# Debugging: Print important directories and files
+echo "Working Directory: $WORKDIR"
+echo "Assembly Directory: $ASSEMBLY_DIR"
+echo "Reference Directory: $REFERENCE_DIR"
+echo "PacBio Reads: $PACBIO_READS"
+echo "Reference Genome: $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa"
+
+# Change to working directory
+cd $WORKDIR
+echo "Changed directory to $(pwd)"
+
+# Check if the reference file exists
+if [ ! -f "$REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa" ]; then
+    echo "ERROR: Reference file not found at $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa"
+    exit 1
+fi
+
+# Create output directories for each assembly
+mkdir -p $OUTPUT_DIR/flye $OUTPUT_DIR/hifiasm $OUTPUT_DIR/lja
+echo "Created output directories"
+
+# QUAST command for Flye assembly with reference, PacBio reads, and custom label
+echo "Running QUAST for Flye assembly"
+apptainer exec /containers/apptainer/quast_5.2.0.sif quast.py \
+  -r $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
+  -g $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.57.gff3 \
+  --threads 16 --eukaryote --est-ref-size 135000000 --large \
+  --pacbio $PACBIO_READS \
+  -l "Flye Assembly" \
+  -o $OUTPUT_DIR/flye \
+  $ASSEMBLY_DIR/flye/assembly.fasta
+
+# QUAST command for Hifiasm assembly with reference, PacBio reads, and custom label
+echo "Running QUAST for Hifiasm assembly"
+apptainer exec /containers/apptainer/quast_5.2.0.sif quast.py \
+  -r $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
+  -g $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.57.gff3 \
+  --threads 16 --eukaryote --est-ref-size 135000000 --large \
+  --pacbio $PACBIO_READS \
+  -l "Hifiasm Assembly" \
+  -o $OUTPUT_DIR/hifiasm \
+  $ASSEMBLY_DIR/hifiasm/hifiasm.bp.p_ctg.fa
+
+# QUAST command for LJA assembly with reference, PacBio reads, and custom label
+echo "Running QUAST for LJA assembly"
+apptainer exec /containers/apptainer/quast_5.2.0.sif quast.py \
+  -r $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
+  -g $REFERENCE_DIR/Arabidopsis_thaliana.TAIR10.57.gff3 \
+  --threads 16 --eukaryote --est-ref-size 135000000 --large \
+  --pacbio $PACBIO_READS \
+  -l "LJA Assembly" \
+  -o $OUTPUT_DIR/lja \
+  $ASSEMBLY_DIR/lja/assembly.fasta
+

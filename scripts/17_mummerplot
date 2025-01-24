@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+#SBATCH --time=23:00:00 
+#SBATCH --job-name=mummerplot
+#SBATCH --mail-user=anmol.ratan@students.unibe.ch
+#SBATCH --mail-type=END
+#SBATCH --partition=pibu_el8
+#SBATCH --output=/data/users/aratan/assembly_annotation_course/compare/mummerplot/%x/output_%j.o  
+#SBATCH --error=/data/users/aratan/assembly_annotation_course/compare/mummerplot/%x/error_%j.e 
+
+WORKDIR=/data/users/aratan/assembly_annotation_course/
+cd $WORKDIR
+
+mkdir -p $WORKDIR/compare/mummerplot
+
+OUTPUTDIR=$WORKDIR/compare/mummerplot
+
+CONTAINER=/containers/apptainer/mummer4_gnuplot.sif
+
+apptainer exec --bind $WORKDIR $CONTAINER \
+    mummerplot --prefix=$OUTPUTDIR/flye_vs_ref \
+--filter -t png --large --layout --fat $WORKDIR/compare/nucmer/flye_vs_ref.delta && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    mummerplot --prefix=$OUTPUTDIR/hifi_vs_ref \
+--filter -t png --large --layout --fat $WORKDIR/compare/nucmer/hifi_vs_ref.delta && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    mummerplot --prefix=$OUTPUTDIR/lja_vs_ref \
+--filter -t png --large --layout --fat $WORKDIR/compare/nucmer/lja_vs_ref.delta && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    mummerplot --prefix=$OUTPUTDIR/hifi_vs_lja \
+--filter -t png --large --layout --fat $WORKDIR/compare/nucmer/hifi_vs_lja.delta && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    mummerplot --prefix=$OUTPUTDIR/hifi_vs_flye \
+--filter -t png --large --layout --fat $WORKDIR/compare/nucmer/hifi_vs_flye.delta && \
+apptainer exec --bind $WORKDIR $CONTAINER \
+    mummerplot --prefix=$OUTPUTDIR/flye_vs_lja \
+--filter -t png --large --layout --fat $WORKDIR/compare/nucmer/flye_vs_lja.delta
+
